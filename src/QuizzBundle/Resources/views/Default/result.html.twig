@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h2> {{ theme.name }} </h2>
+	<p> Vous avez obtenu {{ score }} point(s) sur 10 </p>
+	{% if score < 5 %}
+		<p> Vous pouvez mieux faire ! </p>
+	{% elseif score >= 5 %}
+		<p> Pas mal ! </p>
+	{% endif %}
+	{% for answer in userAnswers %}
+		<ul>
+			<li> {{ answer.quizz.question }} </li>
+			{% if answer.status == false %}
+				<li class="wrong"> {{ answer.answer }} </li>
+			{% elseif answer.status == true %}
+				<li class="true"> {{ answer.answer }} </li>
+			{% endif %}
+		</ul>
+	{% endfor %}
+{% endblock %}

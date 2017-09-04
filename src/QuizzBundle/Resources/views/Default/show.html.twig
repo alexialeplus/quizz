@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h2> {{ theme.name }} </h2>
+	{{ form_start(form, {'action': path('score', {'id' : theme.id }) }) }}
+	<ol>
+		{% for question in theme.quizz %}
+			<li> {{ question.question }} </li>
+			{% for answer in question.answer %}
+				<input type=radio value={{ answer.id }} name={{ question.id }} checked />
+				<label> {{ answer.answer }} </label>
+			{% endfor %}
+		{% endfor %}
+		{{ form_widget(form)}}
+	</ol>
+	{{ form_end(form) }}
+{% endblock %}

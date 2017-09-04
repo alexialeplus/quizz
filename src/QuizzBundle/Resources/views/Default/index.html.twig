@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<a href={{ path('cookies_historic') }}> Voir mon historique </a>
+	{% if allCategories is defined %}
+		{% for category in allCategories %}
+			<a href={{ path('home', {'id': category.id} ) }}> {{ category.name }} </a>
+		{% endfor %}
+	{% elseif allThemes is defined %}
+		{% if allThemes is empty %}
+			<p> Cette catégorie ne comporte aucun quizz pour l'instant :( </p>
+		{% else %}
+			{% for theme in allThemes %}
+				<a href={{ path('quizz', {'id': theme.id} ) }}> {{ theme.name }} </a>
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+{% endblock %}

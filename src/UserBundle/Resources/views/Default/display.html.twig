@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h2> Historique </h2>
+	<ul>
+	{% if score is empty %}
+		<p> Vous n'avez joué à aucun quizz :( </p>
+	{% else %}
+		{% for result in score %}
+			<li> {{ result.theme.name }} : {{ result.score }} / 10 </li>
+		{% endfor %}
+	{% endif %}
+	</ul>
+{% endblock %}

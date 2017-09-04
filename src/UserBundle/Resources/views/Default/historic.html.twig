@@ -1,0 +1,11 @@
+{% block body %}
+	<h2> Historique </h2>
+	<ul>
+	{% if historic is empty %}
+		<p> Vous n'avez joué à aucun quizz :( </p>
+	{% else %}
+		{% for name, score in historic %}
+			<li> {{ name }} : {{ score }} / 10 </li>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
