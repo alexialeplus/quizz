@@ -52,42 +52,21 @@ class GraphController extends Controller
                 ->setParameter('today', $todayDate)
                 ->getQuery();
 
-        dump($this->countAction($queryDay));
 
-        /*$dataLastDay = $queryDay->getResult();
-        $dataLastMonth = $queryMonth->getResult();
-        $dataLastYear = $queryYear->getResult();
-
-        foreach ($dataLastDay as $quizz) {
-            $arrDay[] = $quizz->getTheme()->getName();
+        $resultYear = $this->countAction($queryYear); 
+        if ($resultYear !== FALSE) {
+            $obYear = $this->createChart($resultYear, "chartYear", "Nombre de quizz par catégories sur l'année");
         }
 
-        foreach ($dataLastMonth as $quizz) {
-            $arrMonth[] = $quizz->getTheme()->getName();
+        $resultMonth = $this->countAction($queryMonth);
+        if ($resultMonth !== FALSE) {
+            $obMonth = $this->createChart($resultMonth, "chartMonth", "Nombre de quizz par catégories sur le mois");
         }
-
-        foreach ($dataLastYear as $quizz) {
-            $arrYear[] = $quizz->getTheme()->getName();
-        }
-
-        $nbDataDay = array_count_values($arrDay);
-        $nbDataMonth = array_count_values($arrMonth);
-        $nbDataYear = array_count_values($arrYear);*/
-
-
-    	$series = array(
-        	array("name" => "Data Serie Name", "data" => array(1,2,4,5,6,3,8))
-    	);
-
-    	$ob = new Highchart();
-    	$ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
-    	$ob->title->text('Chart Title');
-    	$ob->xAxis->title(array('text'  => "Horizontal axis title"));
-    	$ob->yAxis->title(array('text'  => "Vertical axis title"));
-    	$ob->series($series);
+        
 
     	return $this->render('AdminBundle:Default:index.html.twig', array(
-        'chart' => $ob
+        'chartYear' => $obYear,
+        'chartMonth' => $obMonth
     	));
 	}
 
@@ -111,6 +90,32 @@ class GraphController extends Controller
 
                 return FALSE;
             }
+        }
+    }
+
+    public function createChart($data, $id, $title) {
+
+        if (isset($data) && is_array($data) && isset($id) && is_string($id) && isset($title) && is_string($title)) {
+
+            foreach ($data as $nameQuizz => $nbQuizz) {
+                $names[] = $nameQuizz;
+                $nb[] = $nbQuizz;
+            }
+
+            $series = array(
+            array("name" => "Nombre de quizz joués", "data" => $nb)
+        );
+
+            $ob = new Highchart();
+            $ob->chart->renderTo($id);  // The #id of the div where to render the chart
+            $ob->title->text($title);
+            $ob->chart->type('column');
+            $ob->xAxis->title(array('text'  => "Catégories"));
+            $ob->yAxis->title(array('text'  => "Nombre de quizz"));
+            $ob->xAxis->categories($names);
+            $ob->series($series);
+
+            return $ob;
         }
     }
 }
