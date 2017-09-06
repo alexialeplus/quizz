@@ -53,21 +53,41 @@ class GraphController extends Controller
                 ->getQuery();
 
 
-        $resultYear = $this->countAction($queryYear); 
-        if ($resultYear !== FALSE) {
-            $obYear = $this->createChart($resultYear, "chartYear", "Nombre de quizz par catégories sur l'année");
+        $resultDay = $this->countAction($queryDay);
+        if (is_array($resultDay)) {
+                $obDay = $this->createChart($resultDay, "chartDay", "Nombre de quizz par catégories sur le jour d'hier");
         }
+        else
+        {
+            $obDay = $this->createChart(array(0), "chartDay", "Nombre de quizz par catégories aujourd'hui");
+        }
+
 
         $resultMonth = $this->countAction($queryMonth);
         if ($resultMonth !== FALSE) {
             $obMonth = $this->createChart($resultMonth, "chartMonth", "Nombre de quizz par catégories sur le mois");
         }
-        
+        else
+        {
+            $obDay = $this->createChart(array(0), "chartMonth", "Nombre de quizz par catégories sur le mois");
+        }
+
+        $resultYear = $this->countAction($queryYear); 
+        if (is_array($resultYear)) {
+            $obYear = $this->createChart($resultYear, "chartYear", "Nombre de quizz par catégories sur l'année");
+        }
+        else
+        {
+            $obDay = $this->createChart(array(0), "chartYear", "Nombre de quizz par catégories sur l'année");
+        }
+
 
     	return $this->render('AdminBundle:Default:index.html.twig', array(
-        'chartYear' => $obYear,
-        'chartMonth' => $obMonth
-    	));
+            'chartYear' => $obYear,
+            'chartMonth' => $obMonth,
+            'chartDay' => $obDay
+            )
+        );
 	}
 
     public function countAction($query) {
