@@ -18,19 +18,6 @@ class GraphController extends Controller
 	{
 		$todayDate = new \DateTime();
 		$todayDate = $todayDate->format('Y-m-d');
-        $arrDate = explode("-", $todayDate);
-        $year = $arrDate[0];
-        $month = $arrDate[1];
-        $day = $arrDate[2];
-        $lastYear = ($year - 1) . '-' . $month . '-' . $day;
-
-        if ($month !== "01") {
-            $lastMonth = $year . '-0' . ($month - 1) . '-' . $day;
-        }
-        else
-        {
-           $lastMonth = $year . '- 12 -' . $day;
-        }
 
 
         $repository = $this->getDoctrine()->getRepository(Score::class);
@@ -40,15 +27,21 @@ class GraphController extends Controller
                 ->setParameter('today', $todayDate . '%')
                 ->getQuery();
 
+        $queryWeek = $repository->createQueryBuilder('w')
+                ->where('w.date BETWEEN :aweekago AND :today')
+                ->setParameter('aweekago', new \DateTime('-7 days'))
+                ->setParameter('today', $todayDate)
+                ->getQuery();
+
         $queryMonth = $repository->createQueryBuilder('m')
                 ->where('m.date BETWEEN :lastmonth AND :today')
-                ->setParameter('lastmonth', $lastMonth)
+                ->setParameter('lastmonth', new \DateTime('-1 month'))
                 ->setParameter('today', $todayDate)
                 ->getQuery();
 
         $queryYear = $repository->createQueryBuilder('y')
                 ->where('y.date BETWEEN :lastyear AND :today')
-                ->setParameter('lastyear', $lastYear)
+                ->setParameter('lastyear', new \DateTime('-1 year'))
                 ->setParameter('today', $todayDate)
                 ->getQuery();
 
@@ -60,6 +53,16 @@ class GraphController extends Controller
         else
         {
             $obDay = $this->createChart(array(0), "chartDay", "Nombre de quizz par catégories aujourd'hui");
+        }
+
+        $resultWeek = $this->countAction($queryWeek);
+
+        if (is_array($resultWeek)) {
+                $obWeek = $this->createChart($resultWeek, "chartWeek", "Nombre de quizz par catégories sur la dernière semaine");
+        }
+        else
+        {
+            $obWeek = $this->createChart(array(0), "chartWeek", "Nombre de quizz par catégories sur la semaine dernière");
         }
 
 
@@ -85,7 +88,8 @@ class GraphController extends Controller
     	return $this->render('AdminBundle:Default:index.html.twig', array(
             'chartYear' => $obYear,
             'chartMonth' => $obMonth,
-            'chartDay' => $obDay
+            'chartDay' => $obDay,
+            'chartWeek' => $obWeek
             )
         );
 	}

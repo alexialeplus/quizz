@@ -2,6 +2,7 @@
 
 {% block body %}
 	<div id="chartDay" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+	<div id="chartWeek" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 	<div id="chartMonth" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 	<div id="chartYear" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 {% endblock %}
@@ -11,6 +12,7 @@
 	<script src="//code.highcharts.com/4.1.8/modules/exporting.js"></script>
 	<script type="text/javascript">
 		{{ chart(chartDay) }}
+		{{ chart(chartWeek) }}
 		{{ chart(chartMonth) }}
 		{{ chart(chartYear) }}
 	</script>
