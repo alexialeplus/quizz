@@ -1,3 +1,5 @@
+{% extends "base.html.twig" %}
+
 {% block body %}
 	<h2> Historique </h2>
 	<ul>
@@ -8,4 +10,5 @@
 			<li> {{ name }} : {{ score }} / 10 </li>
 		{% endfor %}
 	{% endif %}
+	</ul>
 {% endblock %}

@@ -7,7 +7,7 @@
 		<p> Vous n'avez joué à aucun quizz :( </p>
 	{% else %}
 		{% for result in score %}
-			<li> {{ result.theme.name }} : {{ result.score }} / 10 </li>
+			<li> Le {{ result.date|date('d-m-Y') }} -> {{ result.theme.name }} : {{ result.score }} / 10 </li>
 		{% endfor %}
 	{% endif %}
 	</ul>
