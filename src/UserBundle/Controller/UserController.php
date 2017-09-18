@@ -47,7 +47,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display all quizzes played by the logged-in user and his results
+     * Display all quizzes played by the anonym user and his results
      *
      * @Route("/historic", name="cookies_historic")
      */
